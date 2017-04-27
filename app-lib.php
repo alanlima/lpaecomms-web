@@ -46,10 +46,10 @@ function openDB() {
      *   - Replace the connection string tags below with your MySQL parameters
      */
     $db = new mysqli(
-      "localhost",
-      "lpaecomms",
-      "lpaecomms",
-      "LPA_eComms"
+      "localhost", // host
+      "lpaecomms", // user name
+      "lpaecomms", // password
+      "LPA_eComms" // db name
     );
     if ($db->connect_errno) {
       echo "Failed to connect to MySQL: (" .

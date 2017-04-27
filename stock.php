@@ -38,9 +38,12 @@
     <div>
       <table style="width: calc(100% - 15px);border: #cccccc solid 1px">
         <tr style="background: #eeeeee">
-          <td style="width: 80px;border-left: #cccccc solid 1px"><b>Stock Code</b></td>
-          <td style="border-left: #cccccc solid 1px"><b>Stock Name</b></td>
-          <td style="width: 80px;text-align: right"><b>Price</b></td>
+          <td style="width: 80px;border-left: #cccccc solid 1px"><b>Code</b></td>
+          <td style="border-left: #cccccc solid 1px"><b>Name</b></td>
+          <td style="border-left: #cccccc solid 1px"><b>Description</b></td>
+          <td style="border-left: #cccccc solid 1px"><b>On Hand</b></td>
+          <td style="width: 80px; border-left: #cccccc solid 1px"><b>Price</b></td>
+          <td style="border-left: #cccccc solid 1px"><b>Status</b></td>
         </tr>
     <?PHP
       openDB();
@@ -61,17 +64,24 @@
         while ($row = $result->fetch_assoc()) {
           $sid = $row['lpa_stock_ID'];
           ?>
-          <tr class="hl">
-            <td onclick="loadStockItem(<?PHP echo $sid; ?>,'Edit')"
-                style="cursor: pointer;border-left: #cccccc solid 1px">
+          <tr class="hl" onclick="loadStockItem(<?PHP echo $sid; ?>,'Edit')">
+            <td style="cursor: pointer;border-left: #cccccc solid 1px">
               <?PHP echo $sid; ?>
             </td>
-            <td onclick="loadStockItem(<?PHP echo $sid; ?>,'Edit')"
-                style="cursor: pointer;border-left: #cccccc solid 1px">
+            <td style="cursor: pointer;border-left: #cccccc solid 1px">
                 <?PHP echo $row['lpa_stock_name']; ?>
             </td>
-            <td style="text-align: right">
+            <td style="cursor: pointer;border-left: #cccccc solid 1px">
+                <?PHP echo $row['lpa_stock_desc']; ?>
+            </td>
+            <td style="cursor: pointer;border-left: #cccccc solid 1px">
+                <?PHP echo $row['lpa_stock_onhand']; ?>
+            </td>
+            <td style="cursor: pointer;border-left: #cccccc solid 1px">
               <?PHP echo $row['lpa_stock_price']; ?>
+            </td>
+            <td style="cursor: pointer;border-left: #cccccc solid 1px">
+                <?PHP echo $row['lpa_stock_status']; ?>
             </td>
           </tr>
         <?PHP }
