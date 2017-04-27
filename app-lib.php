@@ -47,9 +47,9 @@ function openDB() {
      */
     $db = new mysqli(
       "localhost",
-      "lpa_ecomms",
-      "5XmvHX4djjzQRMRS",
-      "lpa_ecomms"
+      "lpaecomms",
+      "lpaecomms",
+      "LPA_eComms"
     );
     if ($db->connect_errno) {
       echo "Failed to connect to MySQL: (" .
