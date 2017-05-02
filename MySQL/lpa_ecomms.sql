@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `lpa_stock` (
 
 INSERT INTO `lpa_stock` (`lpa_stock_ID`, `lpa_stock_name`, `lpa_stock_desc`, `lpa_stock_onhand`, `lpa_stock_price`, `lpa_stock_image`, `lpa_stock_status`) VALUES
 (123, 'Computer', 'Computer system', '4', '1500.00', 'Computer.png', 'a'),
-(124, 'Apple iPad 4', 'This is an apple iPad 4', '4', '250.00', 'iPad.png', 'D'),
+(124, 'Apple iPad 4', 'This is an apple iPad 4', '4', '250.00', 'iPad.png', 'i'),
 (125, 'Mini Display Port to VGA', 'Cable for Apple', '3', '33.00', '', 'a'),
 (126, 'StLab U-470 USB 2.0 to VGA Adapter', ' VGA Adapter', '5', '42.00', '', 'a'),
 (127, 'USB2.0 To Ethernet Adapter', 'Cable ', '5', '9.00', '', 'a'),

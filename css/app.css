@@ -1,0 +1,30 @@
+.form-group label{
+  font-weight: bold;
+  display: inline-block;
+  width: 80px;
+  vertical-align: top;
+}
+
+.table-list{
+  width: calc(100% - 15px);
+  border: #ccc solid 1px;
+  margin-top: 15px;
+}
+
+.table-list thead tr{
+  background-color: #eee;
+}
+
+.table-list td {
+  border-left: #ccc solid 1px;
+}
+
+.table-list thead{
+  font-weight: bold;
+}
+
+.invoice-amount{
+  text-align: right;
+  margin: 10px 15px 0;
+  font-size: 1.3em;
+}

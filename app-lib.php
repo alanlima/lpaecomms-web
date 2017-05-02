@@ -4,6 +4,7 @@
  *   - for Brisbane Australia (GMT +10)
  */
 date_default_timezone_set('Australia/Queensland');
+setlocale(LC_MONETARY, 'en_US');
 
 
 /**

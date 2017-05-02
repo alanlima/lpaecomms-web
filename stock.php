@@ -43,7 +43,6 @@
           <td style="border-left: #cccccc solid 1px"><b>Description</b></td>
           <td style="border-left: #cccccc solid 1px"><b>On Hand</b></td>
           <td style="width: 80px; border-left: #cccccc solid 1px"><b>Price</b></td>
-          <td style="border-left: #cccccc solid 1px"><b>Status</b></td>
         </tr>
     <?PHP
       openDB();
@@ -53,9 +52,9 @@
          FROM
             lpa_stock
          WHERE
-            lpa_stock_ID LIKE '%$txtSearch%' AND lpa_stock_status <> 'D'
+            lpa_stock_ID LIKE '%$txtSearch%' AND lpa_stock_status <> 'i'
          OR
-            lpa_stock_name LIKE '%$txtSearch%' AND lpa_stock_status <> 'D'
+            lpa_stock_name LIKE '%$txtSearch%' AND lpa_stock_status <> 'i'
 
          ";
       $result = $db->query($query);
@@ -80,14 +79,11 @@
             <td style="cursor: pointer;border-left: #cccccc solid 1px">
               <?PHP echo $row['lpa_stock_price']; ?>
             </td>
-            <td style="cursor: pointer;border-left: #cccccc solid 1px">
-                <?PHP echo $row['lpa_stock_status']; ?>
-            </td>
           </tr>
         <?PHP }
       } else { ?>
         <tr>
-          <td colspan="3" style="text-align: center">
+          <td colspan="5" style="text-align: center">
             No Records Found for: <b><?PHP echo $txtSearch; ?></b>
           </td>
         </tr>

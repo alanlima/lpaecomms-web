@@ -16,7 +16,7 @@
   if($action == "delRec") {
     $query =
       "UPDATE lpa_stock SET
-         lpa_stock_status = 'D'
+         lpa_stock_status = 'i'
        WHERE
          lpa_stock_ID = '$sid' LIMIT 1
       ";
@@ -31,7 +31,7 @@
     }
   }
 
-  isset($_POST['txtStockID'])? $stockID = $_POST['txtStockID'] : $stockID = gen_ID();
+  isset($_POST['txtStockID'])? $stockID = $_POST['txtStockID'] : $stockID = (int)gen_ID('', 9);
   isset($_POST['txtStockName'])? $stockName = $_POST['txtStockName'] : $stockName = "";
   isset($_POST['txtStockDesc'])? $stockDesc = $_POST['txtStockDesc'] : $stockDesc = "";
   isset($_POST['txtStockOnHand'])? $stockOnHand = $_POST['txtStockOnHand'] : $stockOnHand = "0";
@@ -115,23 +115,28 @@
   <div id="content">
     <div class="PageTitle">Stock Record Management (<?PHP echo $action; ?>)</div>
     <form name="frmStockRec" id="frmStockRec" method="post" action="<?PHP echo $_SERVER['PHP_SELF']; ?>">
-      <div>
-        <input name="txtStockID" id="txtStockID" placeholder="Stock ID" value="<?PHP echo $stockID; ?>" style="width: 100px;" title="Stock ID">
+      <div class="form-group">
+        <label for="txtStockID">Id</label>
+        <input readonly="readonly" name="txtStockID" id="txtStockID" placeholder="Stock ID" value="<?PHP echo $stockID; ?>" style="width: 100px;" title="Stock ID">
       </div>
-      <div style="margin-top: <?PHP echo $fieldSpacer; ?>">
+      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+        <label for="txtStockName">Name:</label>
         <input name="txtStockName" id="txtStockName" placeholder="Stock Name" value="<?PHP echo $stockName; ?>" style="width: 400px;"  title="Stock Name">
       </div>
-      <div style="margin-top: <?PHP echo $fieldSpacer; ?>">
+      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+        <label for="txtStockDesc">Description:</label>
         <textarea name="txtStockDesc" id="txtStockDesc" placeholder="Stock Description" style="width: 400px;height: 80px"  title="Stock Description"><?PHP echo $stockDesc; ?></textarea>
       </div>
-      <div style="margin-top: <?PHP echo $fieldSpacer; ?>">
+      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+        <label for="txtStockOnHand">On Hand:</label>
         <input name="txtStockOnHand" id="txtStockOnHand" placeholder="Stock On-Hand" value="<?PHP echo $stockOnHand; ?>" style="width: 90px;text-align: right"  title="Stock On-Hand">
       </div>
-      <div style="margin-top: <?PHP echo $fieldSpacer; ?>">
+      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+        <label for="txtStockPrice">Price:</label>
         <input name="txtStockPrice" id="txtStockPrice" placeholder="Stock Price" value="<?PHP echo $stockPrice; ?>" style="width: 90px;text-align: right"  title="Stock Price">
       </div>
-      <div style="margin-top: <?PHP echo $fieldSpacer; ?>">
-        <div>Stock Status:</div>
+      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+        <label for="txtStatus">Status:</label>
         <input name="txtStatus" id="txtStockStatusActive" type="radio" value="a">
           <label for="txtStockStatusActive">Active</label>
         <input name="txtStatus" id="txtStockStatusInactive" type="radio" value="i">
@@ -151,10 +156,10 @@
   </div>
   <script>
     var stockRecStatus = "<?PHP echo $stockStatus; ?>";
-    if(stockRecStatus == "a") {
-      $('#txtStockStatusActive').prop('checked', true);
-    } else {
+    if(stockRecStatus == "i") {
       $('#txtStockStatusInactive').prop('checked', true);
+    } else {
+      $('#txtStockStatusActive').prop('checked', true);
     }
     $("#btnStockSave").click(function(){
         $("#frmStockRec").submit();
