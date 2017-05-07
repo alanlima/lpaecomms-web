@@ -1,11 +1,15 @@
 <?PHP
+
+include("database/connection_manager.php");
+include("controllers/InvoiceController.php");
+include("models/invoice.php");
+
 /**
  * Set the global time zone
  *   - for Brisbane Australia (GMT +10)
  */
 date_default_timezone_set('Australia/Queensland');
 setlocale(LC_MONETARY, 'en_US');
-
 
 /**
  * Global variables
