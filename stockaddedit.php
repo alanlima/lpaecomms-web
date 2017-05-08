@@ -1,111 +1,24 @@
-<?PHP
-  $authChk = true;
+<?php
   require('app-lib.php');
+
+  use App\Controllers\StockController;
+  use App\Models\Stock;
+
+  $stockController = new StockController;
+  $authChk = true;
+
   isset($_REQUEST['sid'])? $sid = $_REQUEST['sid'] : $sid = "";
-  if(!$sid) {
-    isset($_POST['sid'])? $sid = $_POST['sid'] : $sid = "";
+  if (!$sid) {
+      isset($_POST['sid'])? $sid = $_POST['sid'] : $sid = "";
   }
   isset($_REQUEST['a'])? $action = $_REQUEST['a'] : $action = "";
-  if(!$action) {
-    isset($_POST['a'])? $action = $_POST['a'] : $action = "";
-  }
-  isset($_POST['txtSearch'])? $txtSearch = $_POST['txtSearch'] : $txtSearch = "";
-  if(!$txtSearch) {
-    isset($_REQUEST['txtSearch'])? $txtSearch = $_REQUEST['txtSearch'] : $txtSearch = "";
-  }
-  if($action == "delRec") {
-    $query =
-      "UPDATE lpa_stock SET
-         lpa_stock_status = 'i'
-       WHERE
-         lpa_stock_ID = '$sid' LIMIT 1
-      ";
-    openDB();
-    $result = $db->query($query);
-    if($db->error) {
-      printf("Errormessage: %s\n", $db->error);
-      exit;
-    } else {
-      header("Location: stock.php?a=recDel&txtSearch=$txtSearch");
-      exit;
-    }
+  if (!$action) {
+      isset($_POST['a'])? $action = $_POST['a'] : $action = "";
   }
 
-  isset($_POST['txtStockID'])? $stockID = $_POST['txtStockID'] : $stockID = (int)gen_ID('', 9);
-  isset($_POST['txtStockName'])? $stockName = $_POST['txtStockName'] : $stockName = "";
-  isset($_POST['txtStockDesc'])? $stockDesc = $_POST['txtStockDesc'] : $stockDesc = "";
-  isset($_POST['txtStockOnHand'])? $stockOnHand = $_POST['txtStockOnHand'] : $stockOnHand = "0";
-  isset($_POST['txtStockImage'])? $stockImage = $_POST['txtStockImage'] : $stockImage = "";
-  isset($_POST['txtStockPrice'])? $stockPrice = $_POST['txtStockPrice'] : $stockPrice = "0.00";
-  isset($_POST['txtStatus'])? $stockStatus = $_POST['txtStatus'] : $stockStatus = "";
-  $mode = "insertRec";
-  if($action == "updateRec") {
-    $query =
-      "UPDATE lpa_stock SET
-         lpa_stock_ID = '$stockID',
-         lpa_stock_name = '$stockName',
-         lpa_stock_desc = '$stockDesc',
-         lpa_stock_onhand = '$stockOnHand',
-         lpa_stock_image = '$stockImage',
-         lpa_stock_price = '$stockPrice',
-         lpa_stock_status = '$stockStatus'
-       WHERE
-         lpa_stock_ID = '$sid' LIMIT 1
-      ";
-     openDB();
-     $result = $db->query($query);
-     if($db->error) {
-       printf("Errormessage: %s\n", $db->error);
-       exit;
-     } else {
-         header("Location: stock.php?a=recUpdate&txtSearch=$txtSearch");
-       exit;
-     }
-  }
-  if($action == "insertRec") {
-    $query =
-      "INSERT INTO lpa_stock (
-         lpa_stock_ID,
-         lpa_stock_name,
-         lpa_stock_desc,
-         lpa_stock_onhand,
-         lpa_stock_image,
-         lpa_stock_price,
-         lpa_stock_status
-       ) VALUES (
-         '$stockID',
-         '$stockName',
-         '$stockDesc',
-         '$stockOnHand',
-         '$stockImage',
-         '$stockPrice',
-         '$stockStatus'
-       )
-      ";
-    openDB();
-    $result = $db->query($query);
-    if($db->error) {
-      printf("Errormessage: %s\n", $db->error);
-      exit;
-    } else {
-      header("Location: stock.php?a=recInsert&txtSearch=".$stockID);
-      exit;
-    }
-  }
-
-  if($action == "Edit") {
-    $query = "SELECT * FROM lpa_stock WHERE lpa_stock_ID = '$sid' LIMIT 1";
-    $result = $db->query($query);
-    $row_cnt = $result->num_rows;
-    $row = $result->fetch_assoc();
-    $stockID     = $row['lpa_stock_ID'];
-    $stockName   = $row['lpa_stock_name'];
-    $stockDesc   = $row['lpa_stock_desc'];
-    $stockOnHand = $row['lpa_stock_onhand'];
-    $stockImage  = $row['lpa_stock_image'];
-    $stockPrice  = $row['lpa_stock_price'];
-    $stockStatus = $row['lpa_stock_status'];
-    $mode = "updateRec";
+  $stock = new Stock;
+  if ($action == "Edit") {
+      $stock = $stockController->getById($sid);
   }
   build_header($displayName);
   build_navBlock();
@@ -113,64 +26,76 @@
 ?>
 
   <div id="content">
-    <div class="PageTitle">Stock Record Management (<?PHP echo $action; ?>)</div>
-    <form name="frmStockRec" id="frmStockRec" method="post" action="<?PHP echo $_SERVER['PHP_SELF']; ?>">
+    <div class="PageTitle">Stock Record Management (<?= $action; ?>)</div>
+    <form name="frmStockRec" id="frmStockRec" method="post">
       <div class="form-group">
         <label for="txtStockID">Id</label>
-        <input readonly="readonly" name="txtStockID" id="txtStockID" placeholder="Stock ID" value="<?PHP echo $stockID; ?>" style="width: 100px;" title="Stock ID">
+        <input readonly="readonly" name="txtStockID" id="txtStockID" placeholder="Stock ID" value="<?= $stock->id; ?>" style="width: 100px;" title="Stock ID">
       </div>
-      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
         <label for="txtStockName">Name:</label>
-        <input name="txtStockName" id="txtStockName" placeholder="Stock Name" value="<?PHP echo $stockName; ?>" style="width: 400px;"  title="Stock Name">
+        <input name="txtStockName" id="txtStockName" placeholder="Stock Name" value="<?= $stock->productName; ?>" style="width: 400px;"  title="Stock Name">
       </div>
-      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
         <label for="txtStockDesc">Description:</label>
-        <textarea name="txtStockDesc" id="txtStockDesc" placeholder="Stock Description" style="width: 400px;height: 80px"  title="Stock Description"><?PHP echo $stockDesc; ?></textarea>
+        <textarea name="txtStockDesc" id="txtStockDesc" placeholder="Stock Description" style="width: 400px;height: 80px"  title="Stock Description"><?= $stock->productDescription; ?></textarea>
       </div>
-      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
         <label for="txtStockOnHand">On Hand:</label>
-        <input name="txtStockOnHand" id="txtStockOnHand" placeholder="Stock On-Hand" value="<?PHP echo $stockOnHand; ?>" style="width: 90px;text-align: right"  title="Stock On-Hand">
+        <input name="txtStockOnHand" id="txtStockOnHand" placeholder="Stock On-Hand" value="<?= $stock->onHand; ?>" style="width: 90px;text-align: right"  title="Stock On-Hand">
       </div>
-      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
         <label for="txtStockPrice">Price:</label>
-        <input name="txtStockPrice" id="txtStockPrice" placeholder="Stock Price" value="<?PHP echo $stockPrice; ?>" style="width: 90px;text-align: right"  title="Stock Price">
+        <input name="txtStockPrice" id="txtStockPrice" placeholder="Stock Price" value="<?= $stock->price; ?>" style="width: 90px;text-align: right"  title="Stock Price">
       </div>
-      <div class="form-group" style="margin-top: <?PHP echo $fieldSpacer; ?>">
+      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
         <label for="txtStatus">Status:</label>
         <input name="txtStatus" id="txtStockStatusActive" type="radio" value="a">
           <label for="txtStockStatusActive">Active</label>
         <input name="txtStatus" id="txtStockStatusInactive" type="radio" value="i">
           <label for="txtStockStatusInactive">Inactive</label>
       </div>
-      <input name="a" id="a" value="<?PHP echo $mode; ?>" type="hidden">
-      <input name="sid" id="sid" value="<?PHP echo $sid; ?>" type="hidden">
-      <input name="txtSearch" id="txtSearch" value="<?PHP echo $txtSearch; ?>" type="hidden">
     </form>
     <div class="optBar">
       <button type="button" id="btnStockSave">Save</button>
       <button type="button" onclick="navMan('stock.php')">Close</button>
-      <?PHP if($action == "Edit") { ?>
-      <button type="button" onclick="delRec('<?PHP echo $sid; ?>')" style="color: darkred; margin-left: 20px">DELETE</button>
-      <?PHP } ?>
+      <?php if ($action == "Edit") {
+    ?>
+      <button type="button" style="color: darkred; margin-left: 20px">DELETE</button>
+      <?php
+} ?>
     </div>
   </div>
   <script>
-    var stockRecStatus = "<?PHP echo $stockStatus; ?>";
+    var stockRecStatus = "<?= $stock->status; ?>";
     if(stockRecStatus == "i") {
       $('#txtStockStatusInactive').prop('checked', true);
     } else {
       $('#txtStockStatusActive').prop('checked', true);
     }
     $("#btnStockSave").click(function(){
-        $("#frmStockRec").submit();
+        $.post('api/stock-save.php', $("form").serialize())
+          .done(function(d){
+            alert(d.message);
+            if(d.wasSuccessful){
+              location.href = 'stock.php?refresh';
+            }
+          });
     });
+
     function delRec(ID) {
-      navMan("stockaddedit.php?sid=" + ID + "&a=delRec");
+      $.post('api/stock-delete.php?id=' + ID)
+        .done(function(d){
+          alert(d.message);
+          location.href = 'stock.php?refresh';
+        }).fail(function(x, t){
+          console.log('fail', x, t);
+        });
     }
     setTimeout(function(){
       $("#txtStockName").focus();
     },1);
   </script>
-<?PHP
+<?php
 build_footer();
 ?>

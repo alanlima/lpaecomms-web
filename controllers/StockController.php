@@ -4,32 +4,35 @@ namespace App\Controllers;
 use App\Database\ConnectionManager;
 use App\Models\Stock;
 
-class StockController{
-  private $connManager;
+class StockController
+{
+    private $connManager;
 
-  function __construct(){
-    global $connManager;
-    $connManager = new ConnectionManager();
-  }
+    public function __construct()
+    {
+        global $connManager;
+        $connManager = new ConnectionManager();
+    }
 
-  function getByFilter($filter){
-    global $connManager;
+    public function getByFilter($filter)
+    {
+        global $connManager;
 
-    $link = $connManager->createLink();
+        $link = $connManager->createLink();
 
-    $handle = $link->prepare("SELECT * FROM lpa_stock WHERE
+        $handle = $link->prepare("SELECT * FROM lpa_stock WHERE
                               lpa_stock_status <> 'i' AND
                               (lpa_stock_ID LIKE :filter
                                 OR lpa_stock_name LIKE :filter)");
 
-    $handle->execute(array(':filter' => "%$filter%"));
+        $handle->execute(array(':filter' => "%$filter%"));
 
-    $result = $handle->fetchAll(\PDO::FETCH_OBJ);
+        $result = $handle->fetchAll(\PDO::FETCH_OBJ);
 
-    $stocks = array();
+        $stocks = array();
 
-    foreach ($result as $s) {
-      $stocks[] = new Stock(array(
+        foreach ($result as $s) {
+            $stocks[] = new Stock(array(
         'id' => $s->lpa_stock_ID,
         'productName' => $s->lpa_stock_name,
         'productDescription' => $s->lpa_stock_desc,
@@ -37,23 +40,24 @@ class StockController{
         'price' => $s->lpa_stock_price,
         'status' => $s->lpa_stock_status
       ));
+        }
+
+        return $stocks;
     }
 
-    return $stocks;
-  }
+    public function getById($id)
+    {
+        global $connManager;
 
-  function getById($id){
-    global $connManager;
+        $link = $connManager->createLink();
 
-    $link = $connManager->createLink();
+        $handle = $link->prepare('SELECT * FROM lpa_stock WHERE lpa_stock_ID = :id LIMIT 1');
 
-    $link->prepare('SELECT * FROM lpa_stock WHERE lpa_stock_ID = :id LIMIT 1');
+        $handle->execute(array(':id' => $id));
 
-    $handle = $link->execute(array(':id' => $id));
-
-    if( $handle->rowCount > 0 ){
-      $s = $handle->fetch(\PDO::FETCH_OBJ);
-      return new Stock(array(
+        if ($handle->rowCount() > 0) {
+            $s = $handle->fetch(\PDO::FETCH_OBJ);
+            return new Stock(array(
         'id' => $s->lpa_stock_ID,
         'productName' => $s->lpa_stock_name,
         'productDescription' => $s->lpa_stock_desc,
@@ -61,17 +65,18 @@ class StockController{
         'price' => $s->lpa_stock_price,
         'status' => $s->lpa_stock_status
       ));
-    } else {
-      return null;
+        } else {
+            return null;
+        }
     }
-  }
 
-  function update($id, $stock){
-    global $connManager;
+    public function update($id, $stock)
+    {
+        global $connManager;
 
-    $link = $connManager->createLink();
+        $link = $connManager->createLink();
 
-    $link->prepare('UPDATE lpa_stock SET
+        $handle = $link->prepare('UPDATE lpa_stock SET
                      lpa_stock_desc = :productDescription
                     ,lpa_stock_onhand = :onHand
                     ,lpa_stock_price = :price
@@ -79,9 +84,43 @@ class StockController{
                     ,lpa_stock_name = :productName
                     WHERE lpa_stock_ID = :id');
 
-    $rowCount = $link.execute($stock);
+        $rowCount = $handle->execute((array)$stock);
 
-    return $rowCount > 0;
-  }
+        return $rowCount > 0;
+    }
+
+    public function insert($stock)
+    {
+        global $connManager;
+
+        $link = $connManager->createLink();
+
+        $handle = $link->prepare('INSERT INTO lpa_stock (lpa_stock_name, lpa_stock_desc
+                        ,lpa_stock_onhand, lpa_stock_price
+                        ,lpa_stock_status)
+                        VALUES (:productName, :productDescription
+                        , :onHand, :price, :status)');
+        var_dump($stock);
+        var_dump($handle);
+        $rowCount = $handle->execute(array(
+          ':productName' => $stock->productName,
+          ':productDescription' => $stock->productDescription,
+          ':onHand' => $stock->onHand,
+          ':price' => $stock->price,
+          ':status' => $stock->status
+        ));
+
+        return $rowCount > 0;
+    }
+
+    function delete($stockId){
+      global $connManager;
+
+      $link = $connManager->createLink();
+
+      $handle = $link->prepare("UPDATE lpa_stock SET lpa_stock_status = 'i'
+                                  WHERE lpa_stock_ID = :id");
+
+      $handle->execute(array(':id' => $stockId));
+    }
 }
- ?>
