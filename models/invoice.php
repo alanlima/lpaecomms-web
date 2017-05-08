@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-class Invoice {
-  public $Number = "";
-  public $Date = null;
-  public $ClientName = "";
-  public $Amount = 0.0;
+class Invoice extends ModelBase
+{
+    public $number = "";
+    public $date = null;
+    public $clientName = "";
+    public $amount = 0.0;
 }
-
- ?>

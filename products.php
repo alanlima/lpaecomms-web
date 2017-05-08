@@ -1,9 +1,9 @@
-<?PHP 
-  require('app-lib.php'); 
+<?php
+  require('app-lib.php');
   build_header();
   isset($_POST['a'])? $action = $_POST['a'] : $action = "";
 ?>
-  <?PHP build_navBlock(); ?>
+  <?php build_navBlock(); ?>
   <div id="content">
     <div class="sectionHeader">Product List</div>
 
@@ -19,40 +19,39 @@
 
   </form>
 
-<?PHP
-    if($action == "search") {
-      isset($_POST['txtSearch'])? $itmSearch = $_POST['txtSearch'] : $itmSearch = "";
-      $itemNum = 1;
-      openDB();
-      $query = "SELECT * FROM lpa_stock " .
+<?php
+    if ($action == "search") {
+        isset($_POST['txtSearch'])? $itmSearch = $_POST['txtSearch'] : $itmSearch = "";
+        $itemNum = 1;
+        openDB();
+        $query = "SELECT * FROM lpa_stock " .
         "WHERE lpa_stock_name LIKE '%$itmSearch%' " .
         "AND lpa_stock_status = 'a' " .
         "ORDER BY lpa_stock_name ASC";
-      $result = $db->query($query);
+        $result = $db->query($query);
 
-      while ($row = $result->fetch_assoc()) {
-        if ($row['lpa_image']) {
-          $prodImage = $row['lpa_image'];
-        } else {
-          $prodImage = "question.png";
-        }
-        $prodID = $row['lpa_stock_ID'];
-        ?>
+        while ($row = $result->fetch_assoc()) {
+            if ($row['lpa_image']) {
+                $prodImage = $row['lpa_image'];
+            } else {
+                $prodImage = "question.png";
+            }
+            $prodID = $row['lpa_stock_ID']; ?>
         <div class="productListItem">
           <div
             class="productListItemImageFrame"
-            style="background: url('images/<?PHP echo $prodImage; ?>') no-repeat center center;">
+            style="background: url('images/<?php echo $prodImage; ?>') no-repeat center center;">
           </div>
-          <div class="prodTitle"><?PHP echo $row['lpa_stock_name']; ?></div>
-          <div class="prodDesc"><?PHP echo $row['lpa_stock_desc']; ?></div>
+          <div class="prodTitle"><?php echo $row['lpa_stock_name']; ?></div>
+          <div class="prodDesc"><?php echo $row['lpa_stock_desc']; ?></div>
           <div class="prodOptionsFrame">
             <div class="prodPriceQty">
-              <div class="prodPrice">$<?PHP echo $row['lpa_stock_price']; ?></div>
+              <div class="prodPrice">$<?php echo $row['lpa_stock_price']; ?></div>
               <div class="prodQty">QTY:</div>
               <div class="prodQtyFld">
                 <input
-                  name="fldQTY-<?PHP echo $prodID; ?>"
-                  id="fldQTY-<?PHP echo $prodID; ?>"
+                  name="fldQTY-<?php echo $prodID; ?>"
+                  id="fldQTY-<?php echo $prodID; ?>"
                   type="number"
                   value="1">
               </div>
@@ -60,14 +59,15 @@
             <div class="prodAddToCart">
               <button
                 type="button"
-                onclick="addToCart('<?PHP echo $prodID; ?>')">
+                onclick="addToCart('<?php echo $prodID; ?>')">
                 Add To Cart
               </button>
             </div>
           </div>
           <div style="clear: left"></div>
         </div>
-      <?PHP } ?>
+      <?php
+        } ?>
       </div>
     <?PHP;
     } ?>
@@ -77,6 +77,6 @@
     }
   </script>
 
-<?PHP
+<?php
   build_footer();
 ?>

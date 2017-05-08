@@ -1,8 +1,20 @@
-<?PHP
+<?php
 
-include("database/connection_manager.php");
-include("controllers/InvoiceController.php");
-include("models/invoice.php");
+// include("database/connection-manager.php");
+// include("controllers/invoice-controller.php");
+// include_once("models/base.php");
+// include("models/invoice.php");
+
+//First, define your auto-load function.
+function MyAutoload($className){
+    $className=str_replace("\\","/",$className);
+    $className=str_replace("App/","",$className);
+    $class="{$className}.php";
+    include_once($class);
+}
+
+// Next, register it with PHP.
+spl_autoload_register('MyAutoload');
 
 /**
  * Set the global time zone
@@ -28,26 +40,27 @@ isset($_SESSION["authUser"])?
   $authUser = $_SESSION["authUser"] :
   $authUser = "";
 
-if(isset($authChk) == true) {
-  if($authUser) {
-    openDB();
-    $query = "SELECT * FROM lpa_users WHERE lpa_user_ID = '$authUser' LIMIT 1";
-    $result = $db->query($query);
-    $row = $result->fetch_assoc();
-    $displayName = $row['lpa_user_firstname']." ".$row['lpa_user_lastname'];
-  } else {
-    header("location: login.php");
-  }
+if (isset($authChk) == true) {
+    if ($authUser) {
+        openDB();
+        $query = "SELECT * FROM lpa_users WHERE lpa_user_ID = '$authUser' LIMIT 1";
+        $result = $db->query($query);
+        $row = $result->fetch_assoc();
+        $displayName = $row['lpa_user_firstname']." ".$row['lpa_user_lastname'];
+    } else {
+        header("location: login.php");
+    }
 }
 
 /**
  * Connect to database Function
  * - Connect to the local MySQL database and create an instance
  */
-function openDB() {
-  global $db;
-  if(!is_resource($db)) {
-    /* Conection String eg.: mysqli("localhost", "lpaecomms", "letmein", "lpaecomms")
+function openDB()
+{
+    global $db;
+    if (!is_resource($db)) {
+        /* Conection String eg.: mysqli("localhost", "lpaecomms", "letmein", "lpaecomms")
      *   - Replace the connection string tags below with your MySQL parameters
      */
     $db = new mysqli(
@@ -56,12 +69,12 @@ function openDB() {
       "lpaecomms", // password
       "LPA_eComms" // db name
     );
-    if ($db->connect_errno) {
-      echo "Failed to connect to MySQL: (" .
+        if ($db->connect_errno) {
+            echo "Failed to connect to MySQL: (" .
         $db->connect_errno . ") " .
         $db->connect_error;
+        }
     }
-  }
 }
 
 /**
@@ -69,16 +82,16 @@ function openDB() {
  * - Close a connection to the local MySQL database instance
  * @throws Exception
  */
-function closeDB() {
-  global $db;
-  try {
-    if(is_resource($db)) {
-      $db->close();
+function closeDB()
+{
+    global $db;
+    try {
+        if (is_resource($db)) {
+            $db->close();
+        }
+    } catch (Exception $e) {
+        throw new Exception('Error closing database', 0, $e);
     }
-  } catch (Exception $e)
-  {
-    throw new Exception( 'Error closing database', 0, $e);
-  }
 }
 
 
@@ -87,17 +100,17 @@ function closeDB() {
  *
  *  - Check if the logout button has been clicked, if so kill session.
  */
-if(isset($_REQUEST['killses']) == "true") {
-  $_SESSION = array();
-  if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000,
+if (isset($_REQUEST['killses']) == "true") {
+    $_SESSION = array();
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
       $params["path"], $params["domain"],
       $params["secure"], $params["httponly"]
     );
-  }
-  session_destroy();
-  header("location: login.php");
+    }
+    session_destroy();
+    header("location: login.php");
 }
 
 
@@ -106,17 +119,20 @@ if(isset($_REQUEST['killses']) == "true") {
 /**
  *  Build the page header function
  */
-function build_header() {
-  global $displayName;
+function build_header()
+{
+    global $displayName;
 
-  include 'header.php';
+    include 'header.php';
 }
 
 
 /**
  * Build the Navigation block
  */
-function build_navBlock() { ?>
+function build_navBlock()
+{
+    ?>
     <div id="navBlock">
       <div id="navHeader">MAIN MENU</div>
       <div class="navItem" onclick="navMan('index.php')">HOME</div>
@@ -125,7 +141,8 @@ function build_navBlock() { ?>
       <div class="menuSep"></div>
       <div class="navItem" onclick="navMan('login.php?killses=true')">Logout</div>
     </div>
-<?PHP
+<?php
+
 }
 
 /**
@@ -137,29 +154,30 @@ function build_navBlock() { ?>
  * @param int $strength
  * @return string
  */
-function gen_ID($prefix='',$length=10, $strength=0) {
-  $final_id='';
-  for($i=0;$i< $length;$i++)
-  {
-    $final_id .= mt_rand(0,9);
-  }
-  if($strength == 1) {
-    $final_id = mt_rand(100,999).$final_id;
-  }
-  if($strength == 2) {
-    $final_id = mt_rand(10000,99999).$final_id;
-  }
-  if($strength == 4) {
-    $final_id = mt_rand(1000000,9999999).$final_id;
-  }
-  return $prefix.$final_id;
+function gen_ID($prefix='', $length=10, $strength=0)
+{
+    $final_id='';
+    for ($i=0;$i< $length;$i++) {
+        $final_id .= mt_rand(0, 9);
+    }
+    if ($strength == 1) {
+        $final_id = mt_rand(100, 999).$final_id;
+    }
+    if ($strength == 2) {
+        $final_id = mt_rand(10000, 99999).$final_id;
+    }
+    if ($strength == 4) {
+        $final_id = mt_rand(1000000, 9999999).$final_id;
+    }
+    return $prefix.$final_id;
 }
 
 /**
  *  Build the page footer function
  */
-function build_footer() {
-  include 'footer.php';
+function build_footer()
+{
+    include 'footer.php';
 }
 
 

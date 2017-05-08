@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
   $authChk = true;
   $invoiceAmounts = 0;
@@ -6,30 +6,30 @@
   use App\Controllers\InvoiceController;
 
   isset($_POST['a'])? $action = $_POST['a'] : $action = "";
-  if(!$action) {
-    isset($_REQUEST['a'])? $action = $_REQUEST['a'] : $action = "";
+  if (!$action) {
+      isset($_REQUEST['a'])? $action = $_REQUEST['a'] : $action = "";
   }
   isset($_POST['txtSearch'])? $txtSearch = $_POST['txtSearch'] : $txtSearch = "";
-  if(!$txtSearch) {
-    isset($_REQUEST['txtSearch'])? $txtSearch = $_REQUEST['txtSearch'] : $txtSearch = "";
+  if (!$txtSearch) {
+      isset($_REQUEST['txtSearch'])? $txtSearch = $_REQUEST['txtSearch'] : $txtSearch = "";
   }
   build_header($displayName);
 
   $invoiceController = new InvoiceController;
 ?>
-  <?PHP build_navBlock(); ?>
+  <?php build_navBlock(); ?>
   <div id="content">
     <div class="PageTitle">Sales Management Search</div>
 
     <!-- Search Section Start -->
       <form name="frmSearchInvoice" method="post"
             id="frmSearchInvoice"
-            action="<?PHP echo $_SERVER['PHP_SELF']; ?>">
+            action="<?= $_SERVER['PHP_SELF']; ?>">
         <div class="displayPane">
           <div class="displayPaneCaption">Search:</div>
           <div>
             <input name="txtSearch" id="txtSearch" placeholder="Search Invoice"
-            style="width: calc(100% - 115px)" value="<?PHP echo $txtSearch; ?>">
+            style="width: calc(100% - 115px)" value="<?= $txtSearch; ?>">
             <button type="submit" id="btnSearch">Search</button>
             <!-- <button type="button" id="btnAddRec">Add</button> -->
           </div>
@@ -52,19 +52,19 @@
             <tbody>
 
               <?php foreach ($invoiceController->getInvoices($txtSearch) as $inv) : ?>
-                <?php $invoiceAmounts += $inv->Amount; ?>
+                <?php $invoiceAmounts += $inv->amount; ?>
                 <tr>
                   <td>
-                    <?PHP echo $inv->Number; ?>
+                    <?= $inv->number; ?>
                   </td>
                   <td>
-                    <?php echo date_format(new DateTime($inv->Date), "d/m/Y"); ?>
+                    <?= date_format(new DateTime($inv->date), "d/m/Y"); ?>
                   </td>
                   <td>
-                    <?php echo $inv->ClientName; ?>
+                    <?= $inv->clientName; ?>
                   </td>
                   <td>
-                    <?php echo money_format('$ %i', $inv->Amount); ?>
+                    <?= money_format('$ %i', $inv->amount); ?>
                   </td>
                 </tr>
               <?php endforeach ?>
@@ -76,7 +76,7 @@
         <div class="invoice-amount">
           <span>
             <b>Total Invoice Amount:</b>
-            <?php echo money_format('$ %i', $invoiceAmounts); ?>
+            <?= money_format('$ %i', $invoiceAmounts); ?>
           </span>
         </div>
   </div>
@@ -85,6 +85,6 @@
     $('#txtSearch').select().focus();
   }, 1);
   </script>
-<?PHP
+<?php
 build_footer();
 ?>
