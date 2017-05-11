@@ -21,57 +21,77 @@
       $stock = $stockController->getById($sid);
   }
   build_header($displayName);
-  build_navBlock();
-  $fieldSpacer = "5px";
 ?>
 
-  <div id="content">
-    <div class="PageTitle">Stock Record Management (<?= $action; ?>)</div>
-    <form name="frmStockRec" id="frmStockRec" method="post">
-      <div class="form-group">
-        <label for="txtStockID">Id</label>
-        <input readonly="readonly" name="txtStockID" id="txtStockID" placeholder="Stock ID" value="<?= $stock->id; ?>" style="width: 100px;" title="Stock ID">
-      </div>
-      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
-        <label for="txtStockName">Name:</label>
-        <input name="txtStockName" id="txtStockName" placeholder="Stock Name" value="<?= $stock->productName; ?>" style="width: 400px;"  title="Stock Name">
-      </div>
-      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
-        <label for="txtStockDesc">Description:</label>
-        <textarea name="txtStockDesc" id="txtStockDesc" placeholder="Stock Description" style="width: 400px;height: 80px"  title="Stock Description"><?= $stock->productDescription; ?></textarea>
-      </div>
-      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
-        <label for="txtStockOnHand">On Hand:</label>
-        <input name="txtStockOnHand" id="txtStockOnHand" placeholder="Stock On-Hand" value="<?= $stock->onHand; ?>" style="width: 90px;text-align: right"  title="Stock On-Hand">
-      </div>
-      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
-        <label for="txtStockPrice">Price:</label>
-        <input name="txtStockPrice" id="txtStockPrice" placeholder="Stock Price" value="<?= $stock->price; ?>" style="width: 90px;text-align: right"  title="Stock Price">
-      </div>
-      <div class="form-group">
-        <label for="txtImage">Image:</label>
-        <input type="file" id="txtImage" name="txtImage" onchange="encodeImageFileAsURL();">
-        <input type="hidden" id="txtImageBase64" name="txtImageBase64" />
-      </div>
-      <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
-        <label for="txtStatus">Status:</label>
-        <input name="txtStatus" id="txtStockStatusActive" type="radio" value="a">
-          <label for="txtStockStatusActive">Active</label>
-        <input name="txtStatus" id="txtStockStatusInactive" type="radio" value="i">
-          <label for="txtStockStatusInactive">Inactive</label>
-      </div>
-    </form>
-    <div class="optBar">
-      <button type="button" id="btnStockSave">Save</button>
-      <button type="button" onclick="navMan('stock.php')">Close</button>
-      <?php if ($action == "Edit") {
-    ?>
-      <button type="button" style="color: darkred; margin-left: 20px">DELETE</button>
-      <?php
-
-} ?>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="page-header">
+      <h1>Stock Record Management <small><?= $action; ?></small></h1>
     </div>
   </div>
+</div>
+<form>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <!-- <div class="panel-heading">
+        <h3 class="panel-title"></h3>
+      </div> -->
+      <div class="panel-body">
+        <div class="form-group">
+          <label for="txtStockID">Id:</label>
+          <input type="text" class="form-control" readonly name="txtStockID" placeholder="Stock ID" value="<?= $stock->id; ?>">
+        </div>
+
+        <div class="form-group">
+          <label for="txtStockName">Name:</label>
+          <input type="text" class="form-control" name="txtStockName" placeholder="Stock Name" value="<?= $stock->productName?>">
+        </div>
+
+        <div class="form-group">
+          <label for="txtStockDesc">Description:</label>
+          <textarea class="form-control" style="width: 400px;" name="txtStockDesc" placeholder="Stock Description"><?= $stock->productDescription ?></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="txtStockOnHand">On Hand:</label>
+          <input type="text" class="form-control" name="txtStockOnHand" placeholder="Stock On Hand" value="<?= $stock->onHand; ?>">
+        </div>
+
+        <div class="form-group">
+          <label for="txtStockPrice">Price:</label>
+          <input type="text" class="form-control" name="txtStockPrice" placeholder="Stock Price" value="<?= $stock->price ?>">
+        </div>
+
+        <div class="form-group">
+          <label for="txtImage">Image:</label>
+          <input type="file" id="txtImage" name="txtImage" onchange="encodeImageFileAsURL();">
+          <input type="hidden" id="txtImageBase64" name="txtImageBase64" />
+        </div>
+
+        <div class="form-group">
+          <label for="txtStatus">Status:</label>
+
+            <label class="radio-inline" for="txtStockStatusActive">
+              <input name="txtStatus" id="txtStockStatusActive" type="radio" value="a"> Active</label>
+
+            <label class="radio-inline" for="txtStockStatusInactive">
+              <input name="txtStatus" id="txtStockStatusInactive" type="radio" value="i"> Inactive</label>
+        </div>
+      </div>
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-primary" id="btnStockSave">Save</button>
+        <button type="button" class="btn btn-default" onclick="navMan('stock.php')">Close</button>
+        <?php if ($action == "Edit") {
+      ?>
+        <button type="button" class="btn btn-danger" onclick="delRec(<?= $stock->id; ?>);">Delete</button>
+        <?php
+  } ?>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
   <script>
     var stockRecStatus = "<?= $stock->status; ?>";
     if(stockRecStatus == "i") {

@@ -15,75 +15,93 @@
 
   $stockController = new StockController;
 ?>
-  <?php build_navBlock(); ?>
-  <div id="content">
-    <div class="PageTitle">Stock Management Search</div>
 
-  <!-- Search Section Start -->
-    <form name="frmSearchStock" method="post"
-          id="frmSearchStock"
-          action="<?= $_SERVER['PHP_SELF']; ?>">
-      <div class="displayPane">
-        <div class="displayPaneCaption">Search:</div>
-        <div>
-          <input name="txtSearch" id="txtSearch" placeholder="Search Stock"
-          style="width: calc(100% - 115px)" value="<?= $txtSearch; ?>">
-          <button type="button" id="btnSearch">Search</button>
-          <button type="button" id="btnAddRec">Add</button>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="page-header">
+      <h1>Stock Management <small></small></h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Search</h3>
+      </div>
+      <div class="panel-body">
+        <form action="<?= $_SERVER['PHP_SELF']; ?>" method="post">
+          <input type="hidden" name="a" value="listStock">
+
+          <div class="form-group input-group">
+            <input type="text" class="form-control"
+              name="txtSearch" id="txtSearch" placeholder="Type to search" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit" id="btnSearch">
+                <i class="fa fa-search"></i>
+              </button>
+            </span>
+          </div>
+          <?php if($action == "listStock" || isset($_REQUEST['refresh'])) : ?>
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped">
+              <thead>
+                <tr>
+                  <td></td>
+                  <td>Code</td>
+                  <td>Name</td>
+                  <td>Description</td>
+                  <td>On Hand</td>
+                  <td>Price</td>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                  $stockList = $stockController->getByFilter($txtSearch);
+                  foreach ($stockList as $s) : ?>
+                  <tr class="hl" onclick="loadStockItem(<?= $s->id ?>,'Edit')">
+                    <td style="cursor: pointer;">
+                      <img src="<?= $s->productImage; ?>" alt="Product Image" style="max-width: 100px; max-height: 100px" />
+                    </td>
+                    <td style="cursor: pointer;">
+                      <?= $s->id; ?>
+                    </td>
+                    <td style="cursor: pointer;">
+                        <?= $s->productName; ?>
+                    </td>
+                    <td style="cursor: pointer;">
+                        <?= $s->productDescription; ?>
+                    </td>
+                    <td style="cursor: pointer;">
+                        <?= $s->onHand; ?>
+                    </td>
+                    <td style="cursor: pointer;">
+                      <?= $s->price; ?>
+                    </td>
+                  </tr>
+                <?php endforeach;
+                  if (count($stockList) == 0) : ?>
+                  <tr>
+                    <td colspan="5" style="text-align: center">
+                      No Records Found for: <b><?= $txtSearch; ?></b>
+                    </td>
+                  </tr>
+                <?php endif ?>
+              </tbody>
+            </table>
+          </div>
+        <?php endif ?>
+        </form>
+      </div>
+      <div class="panel-footer">
+        <div class="text-right">
+          <button class="btn btn-default" id="btnAddRec">New Stock</button>
         </div>
       </div>
-      <input type="hidden" name="a" value="listStock">
-    </form>
-    <!-- Search Section End -->
-    <!-- Search Section List Start -->
-    <?php if ($action == "listStock" || isset($_REQUEST['refresh'])) { ?>
-    <div>
-      <table style="width: calc(100% - 15px);border: #cccccc solid 1px">
-        <tr style="background: #eeeeee">
-          <td style="border-left: #ccc solid 1px"></td>
-          <td style="width: 80px;border-left: #cccccc solid 1px"><b>Code</b></td>
-          <td style="border-left: #cccccc solid 1px"><b>Name</b></td>
-          <td style="border-left: #cccccc solid 1px"><b>Description</b></td>
-          <td style="border-left: #cccccc solid 1px"><b>On Hand</b></td>
-          <td style="width: 80px; border-left: #cccccc solid 1px"><b>Price</b></td>
-        </tr>
-
-        <?php
-          $stockList = $stockController->getByFilter($txtSearch);
-          foreach ($stockList as $s) : ?>
-          <tr class="hl" onclick="loadStockItem(<?= $s->id ?>,'Edit')">
-            <td style="cursor: pointer;border-left: %ccc solid 1px">
-              <img src="<?= $s->productImage; ?>" alt="Product Image" style="max-width: 100px; max-height: 100px" />
-            </td>
-            <td style="cursor: pointer;border-left: #cccccc solid 1px">
-              <?= $s->id; ?>
-            </td>
-            <td style="cursor: pointer;border-left: #cccccc solid 1px">
-                <?= $s->productName; ?>
-            </td>
-            <td style="cursor: pointer;border-left: #cccccc solid 1px">
-                <?= $s->productDescription; ?>
-            </td>
-            <td style="cursor: pointer;border-left: #cccccc solid 1px">
-                <?= $s->onHand; ?>
-            </td>
-            <td style="cursor: pointer;border-left: #cccccc solid 1px">
-              <?= $s->price; ?>
-            </td>
-          </tr>
-        <?php endforeach;
-          if (count($stockList) == 0) { ?>
-          <tr>
-            <td colspan="5" style="text-align: center">
-              No Records Found for: <b><?= $txtSearch; ?></b>
-            </td>
-          </tr>
-        <?php
-          } ?> <!-- Finish no records found IF  -->
-        <?php
-      } ?> <!-- Finish action list stock IF -->
-    <!-- Search Section List End -->
+    </div>
   </div>
+</div>
   <script>
     function loadStockItem(ID,MODE) {
       window.location = "stockaddedit.php?sid=" +

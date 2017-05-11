@@ -19,8 +19,8 @@ isset($_POST['txtImageBase64'])? $stock->productImage = $_POST['txtImageBase64']
 $wasSuccessful = $stock->id != "" ?
                   $stockController->update($stock->id, $stock) :
                   $stockController->insert($stock);
-
-//ob_clean(); // clean the output buffer
+//var_dump($stock);
+ob_clean(); // clean the output buffer
 
 header('Content-type: application/json');
 echo json_encode(array(
