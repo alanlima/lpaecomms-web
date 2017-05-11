@@ -38,7 +38,8 @@ class StockController
         'productDescription' => $s->lpa_stock_desc,
         'onHand' => $s->lpa_stock_onhand,
         'price' => $s->lpa_stock_price,
-        'status' => $s->lpa_stock_status
+        'status' => $s->lpa_stock_status,
+        'productImage' => $s->lpa_stock_image
       ));
         }
 
@@ -63,7 +64,8 @@ class StockController
         'productDescription' => $s->lpa_stock_desc,
         'onHand' => $s->lpa_stock_onhand,
         'price' => $s->lpa_stock_price,
-        'status' => $s->lpa_stock_status
+        'status' => $s->lpa_stock_status,
+        'productImage' => $s->lpa_stock_image
       ));
         } else {
             return null;
@@ -82,6 +84,7 @@ class StockController
                     ,lpa_stock_price = :price
                     ,lpa_stock_status = :status
                     ,lpa_stock_name = :productName
+                    ,lpa_stock_image = :productImage
                     WHERE lpa_stock_ID = :id');
 
         $rowCount = $handle->execute((array)$stock);

@@ -7,10 +7,10 @@
   if (!$action) {
       isset($_REQUEST['a'])? $action = $_REQUEST['a'] : $action = "";
   }
-  // isset($_POST['txtSearch'])? $txtSearch = $_POST['txtSearch'] : $txtSearch = "";
-  // if (!$txtSearch) {
-  //     isset($_REQUEST['txtSearch'])? $txtSearch = $_REQUEST['txtSearch'] : $txtSearch = "";
-  // }
+  isset($_POST['txtSearch'])? $txtSearch = $_POST['txtSearch'] : $txtSearch = "";
+  if (!$txtSearch) {
+      isset($_REQUEST['txtSearch'])? $txtSearch = $_REQUEST['txtSearch'] : $txtSearch = "";
+  }
   build_header($displayName);
 
   $stockController = new StockController;
@@ -40,6 +40,7 @@
     <div>
       <table style="width: calc(100% - 15px);border: #cccccc solid 1px">
         <tr style="background: #eeeeee">
+          <td style="border-left: #ccc solid 1px"></td>
           <td style="width: 80px;border-left: #cccccc solid 1px"><b>Code</b></td>
           <td style="border-left: #cccccc solid 1px"><b>Name</b></td>
           <td style="border-left: #cccccc solid 1px"><b>Description</b></td>
@@ -51,6 +52,9 @@
           $stockList = $stockController->getByFilter($txtSearch);
           foreach ($stockList as $s) : ?>
           <tr class="hl" onclick="loadStockItem(<?= $s->id ?>,'Edit')">
+            <td style="cursor: pointer;border-left: %ccc solid 1px">
+              <img src="<?= $s->productImage; ?>" alt="Product Image" style="max-width: 100px; max-height: 100px" />
+            </td>
             <td style="cursor: pointer;border-left: #cccccc solid 1px">
               <?= $s->id; ?>
             </td>

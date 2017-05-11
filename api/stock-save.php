@@ -14,12 +14,13 @@ isset($_POST['txtStockOnHand'])? $stock->onHand = $_POST['txtStockOnHand'] : $st
 //isset($_POST['txtStockImage'])? $stockImage = $_POST['txtStockImage'] : $stockImage = "";
 isset($_POST['txtStockPrice'])? $stock->price = $_POST['txtStockPrice'] : $stock->price = "0.00";
 isset($_POST['txtStatus'])? $stock->status = $_POST['txtStatus'] : $stock->status = "";
+isset($_POST['txtImageBase64'])? $stock->productImage = $_POST['txtImageBase64'] : $stock->productImage = "";
 
 $wasSuccessful = $stock->id != "" ?
                   $stockController->update($stock->id, $stock) :
                   $stockController->insert($stock);
-                  
-ob_clean(); // clean the output buffer
+
+//ob_clean(); // clean the output buffer
 
 header('Content-type: application/json');
 echo json_encode(array(

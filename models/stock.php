@@ -9,4 +9,5 @@ class Stock extends ModelBase
   public $onHand;
   public $price;
   public $status;
+  public $productImage;
 }

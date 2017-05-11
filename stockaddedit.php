@@ -48,6 +48,11 @@
         <label for="txtStockPrice">Price:</label>
         <input name="txtStockPrice" id="txtStockPrice" placeholder="Stock Price" value="<?= $stock->price; ?>" style="width: 90px;text-align: right"  title="Stock Price">
       </div>
+      <div class="form-group">
+        <label for="txtImage">Image:</label>
+        <input type="file" id="txtImage" name="txtImage" onchange="encodeImageFileAsURL();">
+        <input type="hidden" id="txtImageBase64" name="txtImageBase64" />
+      </div>
       <div class="form-group" style="margin-top: <?php echo $fieldSpacer; ?>">
         <label for="txtStatus">Status:</label>
         <input name="txtStatus" id="txtStockStatusActive" type="radio" value="a">
@@ -63,6 +68,7 @@
     ?>
       <button type="button" style="color: darkred; margin-left: 20px">DELETE</button>
       <?php
+
 } ?>
     </div>
   </div>
@@ -95,6 +101,28 @@
     setTimeout(function(){
       $("#txtStockName").focus();
     },1);
+    function encodeImageFileAsURL() {
+
+    var filesSelected = document.getElementById("txtImage").files;
+    if (filesSelected.length > 0) {
+      var fileToLoad = filesSelected[0];
+
+      var fileReader = new FileReader();
+
+      fileReader.onload = function(fileLoadedEvent) {
+        var srcData = fileLoadedEvent.target.result; // <--- data: base64
+        $('#txtImageBase64').val(srcData);
+        console.log('image', srcData);
+        // //var newImage = document.createElement('img');
+        // newImage.src = srcData;
+        //
+        // document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+        // alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+        // console.log("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+      }
+      fileReader.readAsDataURL(fileToLoad);
+    }
+  }
   </script>
 <?php
 build_footer();
