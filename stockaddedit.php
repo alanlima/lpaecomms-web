@@ -50,7 +50,7 @@
 
         <div class="form-group">
           <label for="txtStockDesc">Description:</label>
-          <textarea class="form-control" style="width: 400px;" name="txtStockDesc" placeholder="Stock Description"><?= $stock->productDescription ?></textarea>
+          <textarea class="form-control" row="3" name="txtStockDesc" placeholder="Stock Description"><?= $stock->productDescription ?></textarea>
         </div>
 
         <div class="form-group">
@@ -79,14 +79,21 @@
               <input name="txtStatus" id="txtStockStatusInactive" type="radio" value="i"> Inactive</label>
         </div>
       </div>
-      <div class="panel-footer text-right">
-        <button type="button" class="btn btn-primary" id="btnStockSave">Save</button>
-        <button type="button" class="btn btn-default" onclick="navMan('stock.php')">Close</button>
-        <?php if ($action == "Edit") {
-      ?>
-        <button type="button" class="btn btn-danger" onclick="delRec(<?= $stock->id; ?>);">Delete</button>
-        <?php
-  } ?>
+      <div class="panel-footer">
+
+
+                <?php if ($action == "Edit") {
+              ?>
+                <button type="button" class="btn btn-danger" onclick="delRec(<?= $stock->id; ?>);">Delete</button>
+                <?php
+          } ?>
+
+        <div class="pull-right" style="display: inline-block;">
+          <button type="button" class="btn btn-default" onclick="navMan('stock.php')">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btnStockSave">Save</button>
+        </div>
+
+
       </div>
     </div>
   </div>
@@ -110,6 +117,8 @@
     });
 
     function delRec(ID) {
+      var confirm = window.confirm("Do you want to delete this item?");
+      if(!confirm) return;
       $.post('api/stock-delete.php?id=' + ID)
         .done(function(d){
           alert(d.message);
