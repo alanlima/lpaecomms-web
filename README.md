@@ -1,5 +1,5 @@
 # Introduction
-___
+
 Simple PHP project for my Diploma of Software Development.
 
 This project is based on the teacher template.
