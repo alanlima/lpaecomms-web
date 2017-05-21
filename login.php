@@ -95,6 +95,8 @@
                     </div><!-- /.col -->
                     <div class="col-xs-4">
                       <input type="hidden" name="a" value="doLogin">
+
+<span>Version <b>1.0</b></span>
                         <button type="button" onclick="do_login()" class="btn btn-primary btn-block btn-flat">Entrar</button>
                     </div><!-- /.col -->
                 </div>
