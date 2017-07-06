@@ -28,8 +28,10 @@ setlocale(LC_MONETARY, 'en_US');
  */
 
 // Database instance variable
-$db = null;
+// $db = null;
 $displayName = "";
+
+use App\Database\ConnectionManager;
 
 
 // Start the session
@@ -42,10 +44,14 @@ isset($_SESSION["authUser"])?
 
 if (isset($authChk) == true) {
     if ($authUser) {
-        openDB();
+        $connManager = new ConnectionManager;
+
+        $connManager->open();
+
         $query = "SELECT * FROM lpa_users WHERE lpa_user_ID = '$authUser' LIMIT 1";
-        $result = $db->query($query);
+        $result = $connManager->query($query);
         $row = $result->fetch_assoc();
+
         $displayName = $row['lpa_user_firstname']." ".$row['lpa_user_lastname'];
     } else {
         header("location: login.php");

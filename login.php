@@ -1,3 +1,6 @@
+<?php 
+  require('app-lib.php');
+?>
 <!DOCTYPE html>
 <html>
 <head>
