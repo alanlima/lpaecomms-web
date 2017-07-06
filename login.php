@@ -1,45 +1,3 @@
-<?PHP
-  require('app-lib.php');
-  isset($_POST['a'])? $action = $_POST['a'] : $action = "";
-  $msg = null;
-  if($action == "doLogin") {
-    $chkLogin = false;
-    isset($_POST['UserName'])?
-      $uName = $_POST['UserName'] : $uName = "";
-    isset($_POST['Password'])?
-      $uPassword = $_POST['Password'] : $uPassword = "";
-
-    openDB();
-    $query =
-      "
-      SELECT
-        lpa_user_ID,
-        lpa_user_username,
-        lpa_user_password
-      FROM
-        lpa_users
-      WHERE
-        lpa_user_username = '$uName'
-      AND
-        lpa_user_password = '$uPassword'
-      LIMIT 1
-      ";
-    $result = $db->query($query);
-    $row = $result->fetch_assoc();
-    if($row['lpa_user_username'] == $uName) {
-      if($row['lpa_user_password'] == $uPassword) {
-        $_SESSION['authUser'] = $row['lpa_user_ID'];
-        header("Location: /");
-        exit;
-      }
-    }
-
-    if($chkLogin == false) {
-      $msg = "Login failed! Please try again.";
-    }
-
-  }
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -91,13 +49,10 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-8">
-
+                      <span>Version <b>1.1</b></span>
                     </div><!-- /.col -->
                     <div class="col-xs-4">
-                      <input type="hidden" name="a" value="doLogin">
-
-<span>Version <b>1.0</b></span>
-                        <button type="button" onclick="do_login()" class="btn btn-primary btn-block btn-flat">Entrar</button>
+                      <button type="button" class="btn btn-primary btn-block btn-flat btn-login">Entrar</button>
                     </div><!-- /.col -->
                 </div>
             </form>
@@ -105,16 +60,30 @@
     </div><!-- /.login-box -->
 </body>
 <script>
-  var msg = "<?PHP echo $msg; ?>";
-  if(msg) {
-    alert(msg);
-  }
+  $('.btn-login').click(function(e){
+    e.preventDefault();
+    login();
+  })
 
   $("#frmLogin").keypress(function(e) {
     if(e.which == 13) {
-      $(this).submit();
+      // $(this).submit();
+      login();
     }
   });
+
+  function login(){
+    var form = $('#frmLogin').serialize();
+
+    $.post('./api/auth.php', form)
+      .done(function(data){
+        if(data.success){
+          location.href = '/';
+        } else {
+          alert(data.message);
+        }
+      });
+  }
 
 </script>
 </html>
