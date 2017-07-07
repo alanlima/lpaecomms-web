@@ -7,9 +7,18 @@ class ConnectionManager
     private $db = null;
 
     private $db_host = "localhost";
-    private $db_login = "lpaecomms";
-    private $db_password = "lpaecomms";
-    private $db_name = "LPA_eComms";
+    private $db_login = "";
+    private $db_password = "";
+    private $db_name = "phpmyadmin";
+
+    function __construct(){
+        $configs = include($_SERVER['DOCUMENT_ROOT'].'/config.php');
+
+        $this->db_host = $configs["db_host"];
+        $this->db_login = $configs["db_user"];
+        $this->db_password = $configs["db_pwd"];
+        $this->db_name = $configs["db_name"];
+    }
 
     public function open()
     {

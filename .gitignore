@@ -28,3 +28,8 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/macos
+
+node_modules
+dist
+ftp-deploy.json
+config.php

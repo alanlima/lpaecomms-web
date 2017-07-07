@@ -1,0 +1,25 @@
+{
+  "name": "lpaecomms",
+  "version": "1.0.0",
+  "description": "Simple PHP project for my Diploma of Software Development.",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "node deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alanlima/lpaecomms-web.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alanlima/lpaecomms-web/issues"
+  },
+  "homepage": "https://github.com/alanlima/lpaecomms-web#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-util": "^3.0.8",
+    "vinyl-ftp": "^0.6.0"
+  }
+}
