@@ -1,4 +1,5 @@
 <?php
+
     require('../app-lib.php');
 
     use App\Database\ConnectionManager;
@@ -6,42 +7,34 @@
     ob_clean();
 
     $connManager = new ConnectionManager;
-
+    
     $login = isset($_POST['UserName']) ? $_POST['UserName'] : '';
     $pass = isset($_POST['Password']) ? $_POST['Password'] : '';
 
-    $connManager->open();
+    $link = $connManager->createLink();
 
-     $query =
-      "SELECT
-        lpa_user_ID,
-        lpa_user_username,
-        lpa_user_password
-      FROM
-        lpa_users
-      WHERE
-        lpa_user_username = '$login'
-      AND
-        lpa_user_password = '$pass'
-      LIMIT 1";
-
-    $result = $connManager->query($query);
-
-    $row = $result->fetch_assoc();
-
+    $handle = $link->prepare("SELECT lpa_user_ID, lpa_user_username, lpa_user_password, lpa_user_firstname, lpa_user_lastname
+                              FROM lpa_users
+                              WHERE lpa_user_username = :user
+                                AND lpa_user_password = :pass 
+                              LIMIT 1");
+    $handle->execute(array(':user' => $login, ':pass' => $pass));
+    
     header('Content-type: application/json');
 
-    if(!is_null($row) && $row['lpa_user_username'] == $login) {
-      if($row['lpa_user_password'] == $pass) {
-        $_SESSION['authUser'] = $row['lpa_user_ID'];
+    if($handle->rowCount() > 0) {
 
-        echo json_encode(array(
-            'success' => true,
-            'message' => 'User successfully authenticated.'
-        ));
+      $u = $handle->fetch(\PDO::FETCH_OBJ);
 
-        exit;
-      }
+      $_SESSION['authUser'] = $u->lpa_user_ID;
+      $_SESSION['authUserFullName'] = $u->lpa_user_firstname . " " . $u->lpa_user_lastname;
+      
+      echo json_encode(array(
+          'success' => true,
+          'message' => 'User successfully authenticated.'
+      ));
+
+      exit;
     }
 
     echo json_encode(array(
