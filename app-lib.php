@@ -188,5 +188,16 @@ function build_footer()
     include 'footer.php';
 }
 
+function allowGetOnly() {
+    if($_SERVER['REQUEST_METHOD'] !== 'GET') {
+        header("HTTP/1.0 405 Method Not Allowed"); 
+        exit();
+    }
+}
 
-?>
+function allowPostOnly() {
+    if($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header("HTTP/1.0 405 Method Not Allowed"); 
+        exit();
+    }
+}
