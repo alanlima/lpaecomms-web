@@ -33,14 +33,14 @@ class StockController
 
         foreach ($result as $s) {
             $stocks[] = new Stock(array(
-        'id' => $s->lpa_stock_ID,
-        'productName' => $s->lpa_stock_name,
-        'productDescription' => $s->lpa_stock_desc,
-        'onHand' => $s->lpa_stock_onhand,
-        'price' => $s->lpa_stock_price,
-        'status' => $s->lpa_stock_status,
-        'productImage' => $s->lpa_stock_image
-      ));
+                'id' => $s->lpa_stock_ID,
+                'productName' => $s->lpa_stock_name,
+                'productDescription' => $s->lpa_stock_desc,
+                'onHand' => $s->lpa_stock_onhand,
+                'price' => $s->lpa_stock_price,
+                'status' => $s->lpa_stock_status,
+                'productImage' => $s->lpa_stock_image
+            ));
         }
 
         return $stocks;
