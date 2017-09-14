@@ -103,8 +103,8 @@ class StockController
                         ,lpa_stock_status)
                         VALUES (:productName, :productDescription
                         , :onHand, :price, :status)');
-        var_dump($stock);
-        var_dump($handle);
+        // var_dump($stock);
+        // var_dump($handle);
         $rowCount = $handle->execute(array(
           ':productName' => $stock->productName,
           ':productDescription' => $stock->productDescription,
