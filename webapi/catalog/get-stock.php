@@ -3,6 +3,7 @@
     require('../../app-lib.php');
 
     allowGetOnly();
+    allowCORS();
 
     use App\WebApiControllers\StockController;
 

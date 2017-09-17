@@ -141,7 +141,6 @@
       fileReader.onload = function(fileLoadedEvent) {
         var srcData = fileLoadedEvent.target.result; // <--- data: base64
         $('#txtImageBase64').val(srcData);
-        console.log('image', srcData);
         // //var newImage = document.createElement('img');
         // newImage.src = srcData;
         //

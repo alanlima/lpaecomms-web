@@ -39,10 +39,10 @@ class StockController
     
         foreach($return as $s){
             $stock[] = array(
-                'id' => $s->lpa_stock_ID,
+                'id' => floatval($s->lpa_stock_ID),
                 'name' => $s->lpa_stock_name,
                 'description' => $s->lpa_stock_desc,
-                'price' => $s->lpa_stock_price,
+                'price' => floatval($s->lpa_stock_price),
                 'image' => $s->lpa_stock_image
             );
         }

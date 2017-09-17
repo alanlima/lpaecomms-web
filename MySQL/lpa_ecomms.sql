@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `lpa_stock` (
   `lpa_stock_desc` text NOT NULL,
   `lpa_stock_onhand` varchar(5) NOT NULL,
   `lpa_stock_price` decimal(7,2) NOT NULL,
-  `lpa_stock_image` varchar(255) NULL,
+  `lpa_stock_image` longtext NULL,
   `lpa_stock_status` char(1) NOT NULL,
   PRIMARY KEY (`lpa_stock_ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=129 ;

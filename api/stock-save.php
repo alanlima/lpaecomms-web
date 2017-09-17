@@ -1,4 +1,5 @@
 <?php
+
 require('../app-lib.php');
 
 use App\Controllers\StockController;

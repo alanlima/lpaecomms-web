@@ -196,8 +196,20 @@ function allowGetOnly() {
 }
 
 function allowPostOnly() {
-    if($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        header("HTTP/1.0 200 Ok"); 
+        exit();
+    }
+
+    if($_SERVER['REQUEST_METHOD'] !== 'POST'
+        && $_SERVER['REQUEST_METHOD'] !== 'OPTIONS') {
         header("HTTP/1.0 405 Method Not Allowed"); 
         exit();
     }
+}
+
+function allowCORS(){
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type');
 }
