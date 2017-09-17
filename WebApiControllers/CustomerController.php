@@ -35,18 +35,30 @@ class CustomerController
                                     :login,
                                     :password
                                 )');
-        
-        $handle->execute(array(
-            ':firstname'    => $customer->firstName,
-            ':lastname'     => $customer->lastName,
-            ':address'      => $customer->address,
-            ':phone'        => $customer->phone,
-            ':status'       => 'a',
-            ':login'        => $customer->login,
-            ':password'     => $customer->password
-        ));
 
-        return $handle->rowCount() > 0;
+        try {
+            $link->beginTransaction();
+
+            $handle->execute(array(
+                ':firstname'    => $customer->firstName,
+                ':lastname'     => $customer->lastName,
+                ':address'      => $customer->address,
+                ':phone'        => $customer->phone,
+                ':status'       => 'a',
+                ':login'        => $customer->login,
+                ':password'     => $customer->password
+            ));
+
+            $id = $link->lastInsertId();
+
+            $link->commit();
+
+            return $id;
+        } catch (PDOException $e) {
+            $link->rollback();
+        }
+
+        return -1;
     }
 
     function save($customer) {
