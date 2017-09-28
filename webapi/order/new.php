@@ -6,25 +6,25 @@ allowCORS();
 
 allowPostOnly();
 
-use App\WebApiControllers\CustomerController;
+use App\WebApiControllers\OrderController;
 
-$customerController = new CustomerController;
+$orderController = new OrderController;
 
 $requestJson = json_decode(file_get_contents('php://input'));
 
-$result = $customerController->newCustomer($requestJson);
+$invoiceId = $orderController->create($requestJson);
 
 header('Content-Type: application/json');
 
-if($result != -1) {
+if($invoiceId > 0) {
     echo json_encode(array(
         'wasSuccessfull' => true,
-        'message' => 'Customer created.',
-        'customerId' => $result
+        'message' => 'Invoice created',
+        'invoiceId' => $invoiceId
     ));
 } else {
     echo json_encode(array(
         'wasSuccessfull' => false,
-        'message' => 'Customer can not be created.'
+        'message' => 'Fail to create the invoice'
     ));
 }
