@@ -2,6 +2,8 @@
 
 require('../../app-lib.php');
 
+allowCORS();
+
 allowPostOnly();
 
 use App\WebApiControllers\CustomerController;
@@ -17,9 +19,10 @@ $result = $customerController->login(
 
 header('Content-Type: application/json');
 
-if($result) {
+if($result > 0) {
     echo json_encode(array(
-        'authenticated' => true
+        'authenticated' => true,
+        'customerId' => $result
     ));
 } else {
     echo json_encode(array(

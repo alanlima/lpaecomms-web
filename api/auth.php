@@ -4,7 +4,7 @@
 
     use App\Database\ConnectionManager;
 
-    ob_clean();
+  
 
     $connManager = new ConnectionManager;
     
@@ -19,6 +19,12 @@
                                 AND lpa_user_password = :pass 
                               LIMIT 1");
     $handle->execute(array(':user' => $login, ':pass' => $pass));
+
+    try {
+      ob_clean();
+    } catch(Exception $e) {
+
+    }
     
     header('Content-type: application/json');
 

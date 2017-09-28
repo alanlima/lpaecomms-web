@@ -98,7 +98,12 @@ class CustomerController
             ':password' => $password
         ));
 
-        return $handle->rowCount() > 0;
+        if($handle->rowCount() > 0){
+            $c = $handle->fetch(\PDO::FETCH_OBJ);
+            return $c->lpa_client_ID;
+        }
+
+        return -1;
     }
 
     function info($id) {
@@ -122,7 +127,8 @@ class CustomerController
 
             return array(
                 'id' => $c->lpa_client_ID,
-                'name' => $c->lpa_client_firstname." ".$c->lpa_client_lastname,
+                'firstName' => $c->lpa_client_firstname,
+                'lastName' => $c->lpa_client_lastname,
                 'address' => $c->lpa_client_address,
                 'phone' => $c->lpa_client_phone,
                 'login' => $c->lpa_client_login

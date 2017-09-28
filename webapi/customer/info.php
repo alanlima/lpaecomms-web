@@ -2,6 +2,8 @@
 
     require('../../app-lib.php');
 
+    allowCORS();
+
     allowPostOnly();
 
     use App\WebApiControllers\CustomerController;
