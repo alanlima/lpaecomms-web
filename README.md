@@ -1,4 +1,4 @@
-# Introduction
+## Introduction
 
 Simple PHP project for my Diploma of Software Development.
 
@@ -6,12 +6,12 @@ This project is based on the teacher template.
 
 Several customizations are being made for applying the best practice in software development and also achieve the demand of the course.
 
-# Project Set Up
+## Project Set Up
 
 1. Clone the project: `git clone https://github.com/alanlima/lpaecomms-web.git`
 2. Run `npm install` to install all the dependencies.
 
-# Database Set Up
+## Database Set Up
 
 1. Rename the file `config.template.php` to `config.php`.
 2. Open the renamed file and change the content with the database connection details.
@@ -28,7 +28,7 @@ File Sample:
     );
 ```
 
-# FTP Upload Set Up
+## FTP Upload Set Up
 
 1. Rename the file `ftp-deploy.template.json` to `ftp-deploy.json`.
 2. Open the renamed file and change the content with the FTP Server details.
