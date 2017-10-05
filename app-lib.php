@@ -1,10 +1,5 @@
 <?php
 
-// include("database/connection-manager.php");
-// include("controllers/invoice-controller.php");
-// include_once("models/base.php");
-// include("models/invoice.php");
-
 //First, define your auto-load function.
 function MyAutoload($className){
     $className=str_replace("\\","/",$className);
@@ -44,64 +39,11 @@ isset($_SESSION["authUser"])?
 
 if (isset($authChk) == true) {
     if ($authUser) {
-        // $connManager = new ConnectionManager;
-
-        // $connManager->open();
-
-        // $query = "SELECT * FROM lpa_users WHERE lpa_user_ID = '$authUser' LIMIT 1";
-        // $result = $connManager->query($query);
-        // $row = $result->fetch_assoc();
-
-        // $displayName = $row['lpa_user_firstname']." ".$row['lpa_user_lastname'];
-
         $displayName = $_SESSION["authUserFullName"];
     } else {
         header("location: login.php");
     }
 }
-
-/**
- * Connect to database Function
- * - Connect to the local MySQL database and create an instance
- */
-// function openDB()
-// {
-//     global $db;
-//     if (!is_resource($db)) {
-//         /* Conection String eg.: mysqli("localhost", "lpaecomms", "letmein", "lpaecomms")
-//      *   - Replace the connection string tags below with your MySQL parameters
-//      */
-//     $db = new mysqli(
-//       "localhost", // host
-//       "lpaecomms", // user name
-//       "lpaecomms", // password
-//       "LPA_eComms" // db name
-//     );
-//         if ($db->connect_errno) {
-//             echo "Failed to connect to MySQL: (" .
-//         $db->connect_errno . ") " .
-//         $db->connect_error;
-//         }
-//     }
-// }
-
-/**
- * Close connection to database Function
- * - Close a connection to the local MySQL database instance
- * @throws Exception
- */
-// function closeDB()
-// {
-//     global $db;
-//     try {
-//         if (is_resource($db)) {
-//             $db->close();
-//         }
-//     } catch (Exception $e) {
-//         throw new Exception('Error closing database', 0, $e);
-//     }
-// }
-
 
 /**
  * System Logout check
