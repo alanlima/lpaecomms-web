@@ -1,12 +1,11 @@
 <?php
-
     require('../app-lib.php');
 
     use App\Database\ConnectionManager;
-
-  
+    use App\Utils\Security;
 
     $connManager = new ConnectionManager;
+    $security = new Security;
     
     $login = isset($_POST['UserName']) ? $_POST['UserName'] : '';
     $pass = isset($_POST['Password']) ? $_POST['Password'] : '';
@@ -16,9 +15,10 @@
     $handle = $link->prepare("SELECT lpa_user_ID, lpa_user_username, lpa_user_password, lpa_user_firstname, lpa_user_lastname
                               FROM lpa_users
                               WHERE lpa_user_username = :user
-                                AND lpa_user_password = :pass 
                               LIMIT 1");
-    $handle->execute(array(':user' => $login, ':pass' => $pass));
+    $handle->execute(array(':user' => $login));
+
+
 
     try {
       ob_clean();
@@ -32,15 +32,19 @@
 
       $u = $handle->fetch(\PDO::FETCH_OBJ);
 
-      $_SESSION['authUser'] = $u->lpa_user_ID;
-      $_SESSION['authUserFullName'] = $u->lpa_user_firstname . " " . $u->lpa_user_lastname;
-      
-      echo json_encode(array(
-          'success' => true,
-          'message' => 'User successfully authenticated.'
-      ));
+      $userPassword = $u->lpa_user_password;
 
-      exit;
+      if($security->IsEquals($pass, $userPassword)) {
+        $_SESSION['authUser'] = $u->lpa_user_ID;
+        $_SESSION['authUserFullName'] = $u->lpa_user_firstname . " " . $u->lpa_user_lastname;
+        
+        echo json_encode(array(
+            'success' => true,
+            'message' => 'User successfully authenticated.'
+        ));
+  
+        exit;
+      }
     }
 
     echo json_encode(array(

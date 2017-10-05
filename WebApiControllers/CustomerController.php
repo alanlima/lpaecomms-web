@@ -3,6 +3,7 @@
 namespace App\WebApiControllers;
 
 use App\Database\ConnectionManager;
+use App\Utils\Security;
 
 class CustomerController
 {
@@ -15,6 +16,8 @@ class CustomerController
 
     function newCustomer($customer) {
         global $connManager;
+
+        $security = new Security;
 
         $link = $connManager->createLink();
 
@@ -46,7 +49,7 @@ class CustomerController
                 ':phone'        => $customer->phone,
                 ':status'       => 'a',
                 ':login'        => $customer->login,
-                ':password'     => $customer->password
+                ':password'     => $security->EncryptPassword($customer->password)
             ));
 
             $id = $link->lastInsertId();
@@ -87,20 +90,24 @@ class CustomerController
     function login($username, $password) {
         global $connManager;
 
+        $security = new Security;
+
         $link = $connManager->createLink();
 
-        $handle = $link->prepare('SELECT lpa_client_ID FROM lpa_clients
-                                    WHERE lpa_client_login = :login
-                                      AND lpa_client_password = :password ');
+        $handle = $link->prepare('SELECT lpa_client_ID, lpa_client_password FROM lpa_clients
+                                    WHERE lpa_client_login = :login ');
         
         $handle->execute(array(
-            ':login' => $username,
-            ':password' => $password
+            ':login' => $username
         ));
 
         if($handle->rowCount() > 0){
             $c = $handle->fetch(\PDO::FETCH_OBJ);
-            return $c->lpa_client_ID;
+            $customerPassword = $c->lpa_client_password;
+
+            if($security->IsEquals($password, $customerPassword)) {
+                return $c->lpa_client_ID;
+            }
         }
 
         return -1;
