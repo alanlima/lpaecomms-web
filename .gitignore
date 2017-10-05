@@ -36,3 +36,4 @@ node_modules
 dist
 ftp-deploy.json
 config.php
+log

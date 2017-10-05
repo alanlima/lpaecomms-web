@@ -63,8 +63,54 @@ if (isset($_REQUEST['killses']) == "true") {
     header("location: login.php");
 }
 
+/**
+* Customer Error Handler
+**/
 
+// ----------------------------------------------------------------------------------------------------
+// - Display Errors
+// ----------------------------------------------------------------------------------------------------
+// ini_set('display_errors', 'On');
+// ini_set('html_errors', 0);
 
+// ----------------------------------------------------------------------------------------------------
+// - Error Reporting
+// ----------------------------------------------------------------------------------------------------
+error_reporting(-1);
+
+// ----------------------------------------------------------------------------------------------------
+// - Shutdown Handler
+// ----------------------------------------------------------------------------------------------------
+function ShutdownHandler()
+{
+    if(@is_array($error = @error_get_last()))
+    {
+        return(@call_user_func_array('customErrorHandler', $error));
+    };
+
+    return(TRUE);
+};
+
+register_shutdown_function('ShutdownHandler');
+
+function customErrorHandler($errno, $errstr, $errfile, $errline) {
+    if(!file_exists(__DIR__.'/log')) {
+        mkdir(__DIR__.'/log', 0777, true);
+    }
+
+    $logFile = fopen(__DIR__.'/log/log.txt', 'a+');
+    $currentTime = date("Y-m-d H:i:s");
+
+    $logContent = "==> {$currentTime} - ({$errno}) {$errstr} on {$errfile} at line {$errline}".PHP_EOL;
+
+    fwrite($logFile, $logContent);
+
+    fclose($logFile);
+
+    echo "Fail to execute the operation. Try again.";
+
+    return true;
+}
 
 /**
  *  Build the page header function
@@ -75,7 +121,6 @@ function build_header()
 
     include 'header.php';
 }
-
 
 /**
  * Build the Navigation block
