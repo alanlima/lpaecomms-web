@@ -65,8 +65,14 @@
 
         <div class="form-group">
           <label for="txtImage">Image:</label>
+          
+          <div style="margin: 10px 5px">
+            <img src="<?= $stock->productImage ?>" class="stock-product-image" alt="Product Image" style="max-width: 400px; max-height: 400px"/>
+          </div>
+
+
           <input type="file" id="txtImage" name="txtImage" onchange="encodeImageFileAsURL();">
-          <input type="hidden" id="txtImageBase64" name="txtImageBase64" />
+          <input type="hidden" id="txtImageBase64" name="txtImageBase64" value="<?= $stock->productImage ?>" />
         </div>
 
         <div class="form-group">
@@ -127,30 +133,33 @@
           console.log('fail', x, t);
         });
     }
+
     setTimeout(function(){
       $("#txtStockName").focus();
     },1);
+
     function encodeImageFileAsURL() {
 
-    var filesSelected = document.getElementById("txtImage").files;
-    if (filesSelected.length > 0) {
-      var fileToLoad = filesSelected[0];
+      var filesSelected = document.getElementById("txtImage").files;
+      if (filesSelected.length > 0) {
+        var fileToLoad = filesSelected[0];
 
-      var fileReader = new FileReader();
+        var fileReader = new FileReader();
 
-      fileReader.onload = function(fileLoadedEvent) {
-        var srcData = fileLoadedEvent.target.result; // <--- data: base64
-        $('#txtImageBase64').val(srcData);
-        // //var newImage = document.createElement('img');
-        // newImage.src = srcData;
-        //
-        // document.getElementById("imgTest").innerHTML = newImage.outerHTML;
-        // alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
-        // console.log("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+        fileReader.onload = function(fileLoadedEvent) {
+          var srcData = fileLoadedEvent.target.result; // <--- data: base64
+          $('#txtImageBase64').val(srcData);
+          $('.stock-product-image').attr('src', srcData);
+          // //var newImage = document.createElement('img');
+          // newImage.src = srcData;
+          //
+          // document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+          // alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+          // console.log("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+        }
+        fileReader.readAsDataURL(fileToLoad);
       }
-      fileReader.readAsDataURL(fileToLoad);
     }
-  }
   </script>
 <?php
 build_footer();
