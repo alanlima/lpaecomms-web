@@ -81,7 +81,7 @@
     $.post('./api/auth.php', form)
       .done(function(data){
         if(data.success){
-          location.href = '/';
+          location.href = 'index.php';
         } else {
           alert(data.message);
         }
